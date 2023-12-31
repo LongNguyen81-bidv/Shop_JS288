@@ -20,7 +20,8 @@ const xoaGiohang = (maSo) => {
         xuatSanphamMua(carts, thGiohangMua)
     } else {
         sessionStorage.removeItem('carts');
-        window.history.back();
+        // window.history.back();
+        window.location = `../home/`
         Th_Gio_hang.innerHTML = carts.length
     }
 }
