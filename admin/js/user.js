@@ -165,7 +165,7 @@ const saveUser = () => {
     if (capNhat) {
         // Insert
         let userNew = {
-            "Ho_Ten": Ten,
+            "Ho_ten": Ten,
             "Ma_so": Ma_so,
             "Ten_Dang_nhap": Ten_Dang_nhap,
             "Mat_khau": Mat_khau,
