@@ -143,7 +143,7 @@ const autoKey = () => {
     // arrNhom.sort((a, b) => { return Number(a.Ma_so.trim().split("_")[1]) - Number(b.Ma_so.trim().split("_")[1]) })
     // let keyEnd = arrNhom[arrNhom.length - 1];
     // let num = Number(keyEnd.Ma_so.split("_")[1]) + 1;
-    let num = Number(dsUser.lenght + 1)
+    let num = Number(dsUser.length + 1)
 
     keyNhom = keyNhom.concat("_", num.toString());
     return keyNhom;
