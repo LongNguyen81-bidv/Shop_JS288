@@ -19,7 +19,7 @@ const xoaGiohang = (maSo) => {
         sessionStorage.setItem("carts", JSON.stringify(carts))
         xuatSanphamMua(carts, thGiohangMua)
     } else {
-        Th_Gio_hang = 0
+        Th_Gio_hang.innerHTML = 0
         sessionStorage.removeItem('carts');
         window.history.back();
     }
