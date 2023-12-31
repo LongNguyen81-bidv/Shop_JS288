@@ -21,7 +21,7 @@ const xoaGiohang = (maSo) => {
     } else {
         sessionStorage.removeItem('carts');
         window.history.back();
-        Th_Gio_hang.innerHTML = 0
+        Th_Gio_hang.innerHTML = carts.length
     }
 }
 const soLuong = (maSo, inputSL) => {
