@@ -3,7 +3,7 @@ var capNhat = true;
 const Xuat_Danh_sach = (ds) => {
 
     let html = ``;
-    ds.sort((a, b) => a.Ten.localeCompare(b.Ten))
+    ds.sort((a, b) => a.Ho_ten.localeCompare(b.Ho_ten))
     ds.forEach((item, index) => {
         html += `
         <tr>
@@ -11,17 +11,17 @@ const Xuat_Danh_sach = (ds) => {
             <td class="text-center">
                 <img src='${Dia_chi_Img}/${item.Ma_so}.png' class="" />
             </td>
-            <td>${item.Ten}</td>
-            <td class="text-right" >${Tao_Chuoi_The_hien_So_nguyen_duong(item.Don_gia_Nhap)}<sup>đ</sup></td>
-            <td class="text-right">${Tao_Chuoi_The_hien_So_nguyen_duong(item.Don_gia_Ban)}<sup>đ</sup></td>
-            <td class="text-center">${item.Nhom.Ma_so}</td>
+            <td>${item.Ho_ten}</td>
+            
+            <td class="text-right">${item.Nhom_Nguoi_dung.Ten}</td>
+            <td class="text-center">${item.Nhom_Nguoi_dung.Ma_so}</td>
             <td>
-                <a href="javaScript:void(0)" data-toggle="modal" data-target="#modelId" title='Sửa Tivi' onclick="updateTivi('${item.Ma_so}')">
+                <a href="javaScript:void(0)" data-toggle="modal" data-target="#modelId" title='Sửa Food' onclick="updateUser('${item.Ma_so}')">
                     <i class="fa fa-pencil-square-o text-danger" aria-hidden="true"></i>
                 </a>
             </td>
             <td>
-                <a href="javaScript:void(0)" onclick="deleteTivi('${item.Ma_so}')" title='Xóa Tivi'>
+                <a href="javaScript:void(0)" onclick="deleteUser('${item.Ma_so}')" title='Xóa User'>
                     <i class="fa fa-trash text-danger" aria-hidden="true"></i>
                 </a>
             </td>
@@ -40,25 +40,25 @@ const KeyCode = (event) => {
 
     }
 }
-// Add Tivi
-const insertTivi = () => {
+// Add Food
+const insertFood = () => {
     capNhat = true;
     showModal();
 }
-// Update Tivi
-const updateTivi = (key) => {
+// Update Food
+const updateFood = (key) => {
     capNhat = false;
-    let item = dsTivi.find(x => x.Ma_so == key);
+    let item = dsFood.find(x => x.Ma_so == key);
     showModal(item);
 
 }
-// Delete Tivi
-const deleteTivi = (key) => {
+// Delete food
+const deleteFood = (key) => {
     if (confirm('Hệ thống sẽ Xóa Dữ liệu...?')) {
         let condition = {
             "Ma_so": key
         }
-        apiTiviDelete(condition).then(result => {
+        apiFoodDelete(condition).then(result => {
             alert('Xóa thành công');
             window.location.reload();
         })
@@ -68,9 +68,9 @@ const deleteTivi = (key) => {
 const showModal = (item = null) => {
     let urlImg = null;
     let Nhom = "";
-    document.querySelector("#ModalTitle").innerHTML = `Thêm Tivi`;
+    document.querySelector("#ModalTitle").innerHTML = `Thêm Food`;
     if (item) {
-        document.querySelector("#ModalTitle").innerHTML = `Sửa Tivi`;
+        document.querySelector("#ModalTitle").innerHTML = `Sửa Food`;
         urlImg = `${Dia_chi_Img}/${item.Ma_so}.png`;
         Nhom = item.Nhom.Ma_so;
     }
@@ -86,23 +86,17 @@ const showModal = (item = null) => {
         <input type="text" class="form-control" id="Th_Ten" 
             placeholder="Tên Sản phẩm" value="${item ? item.Ten : ''}">
     </div>
-    <div class="form-group">
-        <label for="Th_Don_gia_Nhap">Đơn giá Nhập</label>
-        <input type="number" class="form-control" id="Th_Don_gia_Nhap" 
-            placeholder="Đơn giá Nhập" value="${item ? item.Don_gia_Nhap : ''}">
-    </div>
+    
     <div class="form-group">
         <label for="Th_Don_gia_Ban">Đơn giá Bán</label>
         <input type="number" class="form-control" id="Th_Don_gia_Ban" 
             placeholder="Đơn giá Bán" value="${item ? item.Don_gia_Ban : ''}">
     </div>
     <div class="form-group">
-        <label for="Th_Nhom_Tivi">Nhóm Tivi</label>
-        <select id="Th_Nhom_Tivi">
-            <option value="SONY" ${Nhom == 'SONY' ? 'selected' : ''} >SONY</option>
-            <option value="SAMSUNG" ${Nhom == 'SAMSUNG' ? 'selected' : ''} >SAMSUNG</option>
-            <option value="LG" ${Nhom == 'LG' ? 'selected' : ''} >LG</option>
-            <option value="KHAC" ${Nhom == 'KHAC' ? 'selected' : ''} >KHAC</option>
+        <label for="Th_Nhom_Food">Nhóm Food</label>
+        <select id="Th_Nhom_Food">
+            <option value="MON_AN" ${Nhom == 'MON_AN' ? 'selected' : ''} >MON_AN</option>
+            <option value="CA_PHE" ${Nhom == 'CA_PHE' ? 'selected' : ''} >CA_PHE</option>
         </select>
     </div>
     <div class="form-group">
@@ -131,37 +125,37 @@ const previewImg = () => {
 }
 // Get key end, create key new
 const autoKey = () => {
-    let keyNhom = Th_Nhom_Tivi.value;
-    let arrNhom = dsTivi.filter(x => x.Nhom.Ma_so == keyNhom)
-    arrNhom.sort((a, b) => { return Number(a.Ma_so.trim().split("_")[1]) - Number(b.Ma_so.trim().split("_")[1]) })
+    let keyNhom = Th_Nhom_Food.value;
+    let arrNhom = dsFood.filter(x => x.Nhom.Ma_so == keyNhom)
+    arrNhom.sort((a, b) => { return Number(a.Ma_so.trim().split("_")[2]) - Number(b.Ma_so.trim().split("_")[2]) })
     let keyEnd = arrNhom[arrNhom.length - 1];
-    let num = Number(keyEnd.Ma_so.split("_")[1]) + 1;
+    let num = Number(keyEnd.Ma_so.split("_")[2]) + 1;
     keyNhom = keyNhom.concat("_", num.toString());
     return keyNhom;
 }
 
 // Save 
-const saveTivi = () => {
+const saveFood = () => {
 
     let Ma_so = (document.querySelector("#Th_Ma_so").value != "") ? document.querySelector("#Th_Ma_so").value : autoKey();
     // console.log(Ma_so);
     // return false;
 
     let Ten = document.querySelector("#Th_Ten").value.trim();
-    let Don_gia_Nhap = Number(document.querySelector("#Th_Don_gia_Nhap").value);
+
     let Don_gia_Ban = Number(document.querySelector("#Th_Don_gia_Ban").value);
-    let Nhom_Tivi = document.querySelector("#Th_Nhom_Tivi").value;
+    let Nhom_Food = document.querySelector("#Th_Nhom_Food").value;
 
     if (capNhat) {
         // Insert
-        let tiviNew = {
+        let foodNew = {
             "Ten": Ten,
             "Ma_so": Ma_so,
             "Don_gia_Ban": Don_gia_Ban,
-            "Don_gia_Nhap": Don_gia_Nhap,
+
             "Nhom": {
-                "Ten": Nhom_Tivi,
-                "Ma_so": Nhom_Tivi
+                "Ten": Nhom_Food,
+                "Ma_so": Nhom_Food
             },
             "Danh_sach_Phieu_Dat": [],
             "Danh_sach_Phieu_Ban": [],
@@ -171,12 +165,12 @@ const saveTivi = () => {
         //console.log(mobileNew)
         //return false;
         // Call API
-        apiTiviInsert(tiviNew).then(result => {
+        apiFoodInsert(foodNew).then(result => {
             console.log(result);
             saveImg(Ma_so);
-            apiTivi().then(result => {
-                dsTivi = result.noiDung;
-                Xuat_Danh_sach(dsTivi);
+            apiFood().then(result => {
+                dsFood = result.noiDung;
+                Xuat_Danh_sach(dsFood);
                 document.querySelector("#ModalCancel").click();
             })
         })
@@ -184,7 +178,7 @@ const saveTivi = () => {
 
     } else {
         // Update
-        let tiviUpdate = {
+        let foodUpdate = {
             condition: {
                 "Ma_so": Ma_so
             },
@@ -192,10 +186,10 @@ const saveTivi = () => {
                 $set: {
                     "Ten": Ten,
                     "Don_gia_Ban": Don_gia_Ban,
-                    "Don_gia_Nhap": Don_gia_Nhap,
+
                     "Nhom": {
-                        "Ten": Nhom_Tivi,
-                        "Ma_so": Nhom_Tivi
+                        "Ten": Nhom_Food,
+                        "Ma_so": Nhom_Food
                     }
                 }
 
@@ -203,12 +197,12 @@ const saveTivi = () => {
         }
         // console.log(mobileUpdate)
         // Call API
-        apiTiviUpdate(tiviUpdate).then(result => {
-            // console.log(result);
+        apiFoodUpdate(foodUpdate).then(result => {
+            //console.log(result);
             saveImg(Ma_so);
-            apiTivi().then(result => {
-                dsTivi = result.noiDung;
-                Xuat_Danh_sach(dsTivi);
+            apiFood().then(result => {
+                dsFood = result.noiDung;
+                Xuat_Danh_sach(dsFood);
                 document.querySelector("#ModalCancel").click();
             })
             //window.location.reload();
