@@ -19,6 +19,7 @@ const xoaGiohang = (maSo) => {
         sessionStorage.setItem("carts", JSON.stringify(carts))
         xuatSanphamMua(carts, thGiohangMua)
     } else {
+        Th_Gio_hang = 0
         sessionStorage.removeItem('carts');
         window.history.back();
     }
@@ -83,7 +84,7 @@ const xuatSanphamMua = (carts = [], Tag) => {
     `
     Tag.innerHTML = html
     tongThanhtien()
-
+    Th_Gio_hang.innerHTML = carts.length
 }
 
 const addToCart = (key, nhom) => {
