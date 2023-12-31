@@ -35,7 +35,7 @@ const Xuat_Danh_sach = (ds) => {
 const KeyCode = (event) => {
     if (event.keyCode == 13) {
         let gtTim = event.target.value.trim()
-        let ds = dsTivi.filter(x => x.Ten.toLowerCase().includes(gtTim.toLowerCase()))
+        let ds = dsFood.filter(x => x.Ten.toLowerCase().includes(gtTim.toLowerCase()))
         Xuat_Danh_sach(ds)
 
     }

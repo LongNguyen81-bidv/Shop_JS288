@@ -131,12 +131,16 @@ const previewImg = () => {
 }
 // Get key end, create key new
 const autoKey = () => {
-    let keyNhom = Th_Nhom_Tivi.value;
-    let arrNhom = dsTivi.filter(x => x.Nhom.Ma_so == keyNhom)
-    arrNhom.sort((a, b) => { return Number(a.Ma_so.trim().split("_")[1]) - Number(b.Ma_so.trim().split("_")[1]) })
-    let keyEnd = arrNhom[arrNhom.length - 1];
-    let num = Number(keyEnd.Ma_so.split("_")[1]) + 1;
+    let keyNhom = 'TIVI';
+    let num = Number(dsTivi.length + 1);
     keyNhom = keyNhom.concat("_", num.toString());
+    // let keyNhom = Th_Nhom_Tivi.value;
+    // let arrNhom = dsTivi.filter(x => x.Nhom.Ma_so == keyNhom)
+    // arrNhom.sort((a, b) => { return Number(a.Ma_so.trim().split("_")[1]) - Number(b.Ma_so.trim().split("_")[1]) })
+    // let keyEnd = arrNhom[arrNhom.length - 1];
+    // let num = Number(keyEnd.Ma_so.split("_")[1]) + 1;
+    // keyNhom = keyNhom.concat("_", num.toString());
+
     return keyNhom;
 }
 
