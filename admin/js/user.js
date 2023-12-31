@@ -3,7 +3,7 @@ var capNhat = true;
 const Xuat_Danh_sach = (ds) => {
 
     let html = ``;
-    ds.sort((a, b) => a.Ho_ten.localeCompare(b.Ho_ten))
+    // ds.sort((a, b) => a.Ho_ten.localeCompare(b.Ho_ten))
     ds.forEach((item, index) => {
         html += `
         <tr>
@@ -35,30 +35,30 @@ const Xuat_Danh_sach = (ds) => {
 const KeyCode = (event) => {
     if (event.keyCode == 13) {
         let gtTim = event.target.value.trim()
-        let ds = dsTivi.filter(x => x.Ten.toLowerCase().includes(gtTim.toLowerCase()))
+        let ds = dsUser.filter(x => x.Ten.toLowerCase().includes(gtTim.toLowerCase()))
         Xuat_Danh_sach(ds)
 
     }
 }
-// Add Food
-const insertFood = () => {
+// Add User
+const insertUser = () => {
     capNhat = true;
     showModal();
 }
-// Update Food
-const updateFood = (key) => {
+// Update User
+const updateUser = (key) => {
     capNhat = false;
-    let item = dsFood.find(x => x.Ma_so == key);
+    let item = dsUser.find(x => x.Ma_so == key);
     showModal(item);
 
 }
-// Delete food
-const deleteFood = (key) => {
+// Delete User
+const deleteUser = (key) => {
     if (confirm('Hệ thống sẽ Xóa Dữ liệu...?')) {
         let condition = {
             "Ma_so": key
         }
-        apiFoodDelete(condition).then(result => {
+        apiUserDelete(condition).then(result => {
             alert('Xóa thành công');
             window.location.reload();
         })
@@ -68,11 +68,11 @@ const deleteFood = (key) => {
 const showModal = (item = null) => {
     let urlImg = null;
     let Nhom = "";
-    document.querySelector("#ModalTitle").innerHTML = `Thêm Food`;
+    document.querySelector("#ModalTitle").innerHTML = `Thêm User`;
     if (item) {
-        document.querySelector("#ModalTitle").innerHTML = `Sửa Food`;
+        document.querySelector("#ModalTitle").innerHTML = `Sửa User`;
         urlImg = `${Dia_chi_Img}/${item.Ma_so}.png`;
-        Nhom = item.Nhom.Ma_so;
+        Nhom = item.Nhom_Nguoi_dung.Ma_so;
     }
 
     let html = ``
@@ -84,19 +84,32 @@ const showModal = (item = null) => {
     <div class="form-group">
         <label for="Th_Ten">Tên</label>
         <input type="text" class="form-control" id="Th_Ten" 
-            placeholder="Tên Sản phẩm" value="${item ? item.Ten : ''}">
+            placeholder="Tên Người dùng" value="${item ? item.Ho_ten : ''}">
+    </div>
+    <div class="form-group">
+        <label for="Th_Ten_Dang_nhap">User</label>
+        <input type="text" class="form-control" id="Th_Ten_Dang_nhap" 
+            placeholder="Tên đăng nhập" value="${item ? item.Ten_Dang_nhap : ''}">
+    </div>
+    <div class="form-group">
+        <label for="Th_Mat_khau">Password</label>
+        <input type="text" class="form-control" id="Th_Mat_khau" 
+            placeholder="Mật khẩu" value="${item ? item.Mat_khau : ''}">
     </div>
     
     <div class="form-group">
-        <label for="Th_Don_gia_Ban">Đơn giá Bán</label>
-        <input type="number" class="form-control" id="Th_Don_gia_Ban" 
-            placeholder="Đơn giá Bán" value="${item ? item.Don_gia_Ban : ''}">
+        <label for="Th_Chuc_vu">Chức vụ</label>
+        <input class="form-control" id="Th_Chuc_vu" 
+            placeholder="Chức vụ" value="${item ? item.Nhom_Nguoi_dung.Ten : ''}">
     </div>
     <div class="form-group">
-        <label for="Th_Nhom_Food">Nhóm Food</label>
-        <select id="Th_Nhom_Food">
-            <option value="MON_AN" ${Nhom == 'MON_AN' ? 'selected' : ''} >MON_AN</option>
-            <option value="CA_PHE" ${Nhom == 'CA_PHE' ? 'selected' : ''} >CA_PHE</option>
+        <label for="Th_Nhom_User">Nhóm User</label>
+        <select id="Th_Nhom_User">
+            <option value="NHAN_VIEN_BAN_HANG" ${Nhom == 'NHAN_VIEN_BAN_HANG' ? 'selected' : ''} >NHAN_VIEN_BAN_HANG</option>
+            <option value="NHAN_VIEN_NHAP_HANG" ${Nhom == 'NHAN_VIEN_NHAP_HANG' ? 'selected' : ''} >NHAN_VIEN_NHAP_HANG</option>
+            <option value="QUAN_LY_CUA_HANG" ${Nhom == 'QUAN_LY_CUA_HANG' ? 'selected' : ''} >QUAN_LY_CUA_HANG</option>
+            <option value="QUAN_LY_BAN_HANG" ${Nhom == 'QUAN_LY_BAN_HANG' ? 'selected' : ''} >QUAN_LY_BAN_HANG</option>
+            <option value="QUAN_LY_NHAP_HANG" ${Nhom == 'QUAN_LY_NHAP_HANG' ? 'selected' : ''} >QUAN_LY_NHAP_HANG</option>
         </select>
     </div>
     <div class="form-group">
@@ -125,52 +138,57 @@ const previewImg = () => {
 }
 // Get key end, create key new
 const autoKey = () => {
-    let keyNhom = Th_Nhom_Food.value;
-    let arrNhom = dsFood.filter(x => x.Nhom.Ma_so == keyNhom)
-    arrNhom.sort((a, b) => { return Number(a.Ma_so.trim().split("_")[2]) - Number(b.Ma_so.trim().split("_")[2]) })
-    let keyEnd = arrNhom[arrNhom.length - 1];
-    let num = Number(keyEnd.Ma_so.split("_")[2]) + 1;
+    let keyNhom = 'NV';
+    // let arrNhom = dsUser.filter(x => x.Ma_so == keyNhom)
+    // arrNhom.sort((a, b) => { return Number(a.Ma_so.trim().split("_")[1]) - Number(b.Ma_so.trim().split("_")[1]) })
+    // let keyEnd = arrNhom[arrNhom.length - 1];
+    // let num = Number(keyEnd.Ma_so.split("_")[1]) + 1;
+    let num = Number(dsUser.lenght + 1)
+
     keyNhom = keyNhom.concat("_", num.toString());
     return keyNhom;
 }
 
 // Save 
-const saveFood = () => {
+const saveUser = () => {
 
     let Ma_so = (document.querySelector("#Th_Ma_so").value != "") ? document.querySelector("#Th_Ma_so").value : autoKey();
     // console.log(Ma_so);
     // return false;
-
+    let Ten_Dang_nhap = document.querySelector("#Th_Ten_Dang_nhap").value.trim()
+    let Mat_khau = document.querySelector("#Th_Mat_khau").value.trim()
     let Ten = document.querySelector("#Th_Ten").value.trim();
 
-    let Don_gia_Ban = Number(document.querySelector("#Th_Don_gia_Ban").value);
-    let Nhom_Food = document.querySelector("#Th_Nhom_Food").value;
+    let Chuc_vu = document.querySelector("#Th_Chuc_vu").value;
+    let Nhom_User = document.querySelector("#Th_Nhom_User").value;
 
     if (capNhat) {
         // Insert
-        let foodNew = {
-            "Ten": Ten,
+        let userNew = {
+            "Ho_Ten": Ten,
             "Ma_so": Ma_so,
-            "Don_gia_Ban": Don_gia_Ban,
+            "Ten_Dang_nhap": Ten_Dang_nhap,
+            "Mat_khau": Mat_khau,
+            // "Chuc_vu": Chuc_vu,
 
-            "Nhom": {
-                "Ten": Nhom_Food,
-                "Ma_so": Nhom_Food
+            "Nhom_Nguoi_dung": {
+                "Ten": Chuc_vu,
+                "Ma_so": Nhom_User
             },
-            "Danh_sach_Phieu_Dat": [],
-            "Danh_sach_Phieu_Ban": [],
-            "Danh_sach_Phieu_Nhap": []
+            // "Danh_sach_Phieu_Dat": [],
+            // "Danh_sach_Phieu_Ban": [],
+            // "Danh_sach_Phieu_Nhap": []
         }
 
         //console.log(mobileNew)
         //return false;
         // Call API
-        apiFoodInsert(foodNew).then(result => {
+        apiUserInsert(userNew).then(result => {
             console.log(result);
             saveImg(Ma_so);
-            apiFood().then(result => {
-                dsFood = result.noiDung;
-                Xuat_Danh_sach(dsFood);
+            apiUser().then(result => {
+                dsUser = result.noiDung;
+                Xuat_Danh_sach(dsUser);
                 document.querySelector("#ModalCancel").click();
             })
         })
@@ -178,18 +196,20 @@ const saveFood = () => {
 
     } else {
         // Update
-        let foodUpdate = {
+        let userUpdate = {
             condition: {
                 "Ma_so": Ma_so
             },
             update: {
                 $set: {
-                    "Ten": Ten,
-                    "Don_gia_Ban": Don_gia_Ban,
+                    "Ho_ten": Ten,
+                    "Ma_so": Ma_so,
+                    "Ten_Dang_nhap": Ten_Dang_nhap,
+                    "Mat_khau": Mat_khau,
 
-                    "Nhom": {
-                        "Ten": Nhom_Food,
-                        "Ma_so": Nhom_Food
+                    "Nhom_Nguoi_dung": {
+                        "Ten": Chuc_vu,
+                        "Ma_so": Nhom_User
                     }
                 }
 
@@ -197,12 +217,12 @@ const saveFood = () => {
         }
         // console.log(mobileUpdate)
         // Call API
-        apiFoodUpdate(foodUpdate).then(result => {
+        apiUserUpdate(userUpdate).then(result => {
             //console.log(result);
             saveImg(Ma_so);
-            apiFood().then(result => {
-                dsFood = result.noiDung;
-                Xuat_Danh_sach(dsFood);
+            apiUser().then(result => {
+                dsUser = result.noiDung;
+                Xuat_Danh_sach(dsUser);
                 document.querySelector("#ModalCancel").click();
             })
             //window.location.reload();
@@ -226,7 +246,7 @@ const saveImg = (Ma_so) => {
             Chuoi_nhi_phan = e.target.result;
             let img = { "name": Ten_Hinh, "src": Chuoi_nhi_phan }
             //console.log(img)
-            apiImageTivi(img).then(result => {
+            apiImageUser(img).then(result => {
                 //console.log(result)
                 //reader.clear()    
             })

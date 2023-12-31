@@ -133,6 +133,22 @@ const apiImageFood = (item) => {
     })
 }
 
+const apiImageUser = (item) => {
+    return new Promise((Ket_qua, Loi) => {
+        let Du_lieu = {}
+        let Xu_ly_HTTP = new XMLHttpRequest()
+        Xu_ly_HTTP.onload = () => {
+            var Chuoi_JSON = Xu_ly_HTTP.responseText
+            Du_lieu = JSON.parse(Chuoi_JSON)
+            Ket_qua(Du_lieu)
+        }
+        let Tham_so = `ImagesNguoidung`
+        let Dia_chi_Xu_ly = `${Dia_chi_Dich_vu}/${Tham_so}`
+        Xu_ly_HTTP.open("POST", Dia_chi_Xu_ly)
+        Xu_ly_HTTP.send(JSON.stringify(item))
+    })
+}
+
 //===============================================================================
 const apiDienthoaiInsert = (item) => {
     return new Promise((Ket_qua, Loi) => {
@@ -182,6 +198,22 @@ const apiFoodInsert = (item) => {
     })
 }
 
+const apiUserInsert = (item) => {
+    return new Promise((Ket_qua, Loi) => {
+        let Du_lieu = {}
+        let Xu_ly_HTTP = new XMLHttpRequest()
+        Xu_ly_HTTP.onload = () => {
+            var Chuoi_JSON = Xu_ly_HTTP.responseText
+            Du_lieu = JSON.parse(Chuoi_JSON)
+            Ket_qua(Du_lieu)
+        }
+        let Tham_so = `ThemUser`
+        let Dia_chi_Xu_ly = `${Dia_chi_Dich_vu}/${Tham_so}`
+        Xu_ly_HTTP.open("POST", Dia_chi_Xu_ly)
+        Xu_ly_HTTP.send(JSON.stringify(item))
+    })
+}
+
 //===============================================================================
 const apiDienthoaiUpdate = (item) => {
     return new Promise((Ket_qua, Loi) => {
@@ -225,6 +257,22 @@ const apiFoodUpdate = (item) => {
             Ket_qua(Du_lieu)
         }
         let Tham_so = `SuaFood`
+        let Dia_chi_Xu_ly = `${Dia_chi_Dich_vu}/${Tham_so}`
+        Xu_ly_HTTP.open("PUT", Dia_chi_Xu_ly)
+        Xu_ly_HTTP.send(JSON.stringify(item))
+    })
+}
+
+const apiUserUpdate = (item) => {
+    return new Promise((Ket_qua, Loi) => {
+        let Du_lieu = {}
+        let Xu_ly_HTTP = new XMLHttpRequest()
+        Xu_ly_HTTP.onload = () => {
+            var Chuoi_JSON = Xu_ly_HTTP.responseText
+            Du_lieu = JSON.parse(Chuoi_JSON)
+            Ket_qua(Du_lieu)
+        }
+        let Tham_so = `SuaUser`
         let Dia_chi_Xu_ly = `${Dia_chi_Dich_vu}/${Tham_so}`
         Xu_ly_HTTP.open("PUT", Dia_chi_Xu_ly)
         Xu_ly_HTTP.send(JSON.stringify(item))
