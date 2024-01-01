@@ -4,7 +4,7 @@ let ds = [];
 
 const keyCode = (event) => {
     //console.log(event.keyCode)
-    if (event.keyCode == 13) {
+    if (event.keyCode != 0 || event.keyCode == 13) {
         //event.keyCode == 13  => người dùng nhấn phím Enter
 
         let gtTim = event.target.value
