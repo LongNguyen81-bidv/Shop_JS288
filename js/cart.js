@@ -201,7 +201,7 @@ const datHang = () => {
         console.log(result);
         alert('Đơn đặt hàng thành công...')
         sessionStorage.removeItem('carts');
-        window.location(`../home/`);
+        window.location = (`../home/`);
     }).catch(err => {
         console.log(err);
     })
